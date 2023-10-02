@@ -32,7 +32,7 @@ export const getTodos = async (req: any, res: Response) => {
   const { id } = req.params;
   try {
     const todosInDb = await Todo.find({ user: id });
-    if (!todosInDb) {
+    if (!todosInDb.length) {
       return res.status(400).json({
         ok: false,
         msg: "there is not any todo with that id",
@@ -65,7 +65,7 @@ export const updateTodo = async (req: any, res: Response) => {
     });
 
     res.status(200).json({
-      ok: false,
+      ok: true,
       updatedTodo,
     });
   } catch (error) {
@@ -73,6 +73,33 @@ export const updateTodo = async (req: any, res: Response) => {
     res.status(500).json({
       ok: false,
       msg: "internal server error",
+    });
+  }
+};
+
+export const deleteTodo = async(req: Request, res: Response) => {
+  const {id} = req.params;
+
+  try {
+    const TodoInDb = await Todo.findById(id);
+    if (!TodoInDb) {
+      return res.status(401).json({
+        ok: false,
+        msg: "there is not  any todo with that id",
+      });
+    }
+    await Todo.findByIdAndDelete(id);
+
+    res.status(200).json({
+      ok:true,
+      msg:'todo deleted'
+    })
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      msg: "hable con el admin",
     });
   }
 };

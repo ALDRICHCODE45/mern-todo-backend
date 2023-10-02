@@ -72,6 +72,20 @@ export const userLogin = async (req: Request, res: Response) => {
   }
 };
 
+export const renewToken = async(req: any, res:Response) => {
+  const { id, name } = req;
+  const user =await User.findById(id)
+  //generar JWT
+  const token = generateJWT(id, name);
+
+  res.json({
+    ok: true,
+    msg: "Renew JWToken",
+    token,
+    user
+  });
+};
+
 export const deleteUser = (req: Request, res: Response) => {
   const { id } = req.params;
   res.json({

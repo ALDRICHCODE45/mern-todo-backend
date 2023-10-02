@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { createUser, deleteUser, userLogin } from "../controllers";
+import { createUser, deleteUser, renewToken, userLogin } from "../controllers";
 import { check } from "express-validator";
 import { FieldsValidate } from "../middlewares/FieldsValidate";
+import {validarJWT} from "../middlewares/validateJWT";
 
 export const router = Router();
 
@@ -27,4 +28,6 @@ router.post(
   ],
   userLogin
 );
+router.get("/renew",validarJWT , renewToken);
+
 router.delete("/:id", deleteUser);
